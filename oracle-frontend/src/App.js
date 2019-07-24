@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
 import './App.css';
 import web3 from './web3';
 import subscriber from './subscriber';
@@ -39,7 +38,8 @@ class App extends Component {
     await subscriber.methods.bond(this.state.dots).send({
       from: accounts[0],
     });
-
+    console.log(this.state.dots);
+    console.log(this.state.message);
     this.setState({message: 'You have been entered!'});
   };
 
@@ -52,12 +52,18 @@ class App extends Component {
     this.setState({message: 'Waiting on transaction success...'});
     
     const bytes32Arr = [];
+    bytes32Arr.push(web3.utils.fromAscii(this.state.name1));
 
     await subscriber.methods.query("stocks", bytes32Arr).send({
       from: accounts[0],
     });
 
-    this.setState({message: 'You have been entered!'});
+    subscriber.events.ReceiveResponse({},(error,event) => {
+      console.log(event);
+    }).on('data', (event) => {
+      this.setState({response1: 'Group created with ID: ' + event.returnValues.result})
+      }).on('error', console.error);
+    this.setState({message: 'Received the response!'});
   };
 
 
@@ -91,6 +97,7 @@ class App extends Component {
             <label>Stock1</label>
             <input 
               value = {this.state.name1}
+
               onChange={event => this.setState({ name1: event.target.value })}
             />
           </div>

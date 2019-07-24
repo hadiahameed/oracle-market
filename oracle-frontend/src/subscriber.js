@@ -1,6 +1,6 @@
 import web3 from './web3';
 
-const address = '0x0b0D1283705b218c318462977FA8B7Ce34D3f78A'; // deployed contract, did some console.log, copypastaed from terminal
+const address = '0x2453F057130e191bcD1f6D41Bf66222f9e66333c'; // deployed contract, did some console.log, copypastaed from terminal
 const abi = [
 	{
 		"constant": false,
@@ -166,9 +166,9 @@ const abi = [
 				"type": "uint256"
 			},
 			{
-				"indexed": true,
+				"indexed": false,
 				"name": "result",
-				"type": "int256"
+				"type": "string"
 			}
 		],
 		"name": "ReceiveResponse",
