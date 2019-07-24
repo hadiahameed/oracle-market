@@ -20,7 +20,7 @@ contract Subscriber {
     uint256 query_id;
     string[] public response;
 
-    event ReceiveResponse(uint256 indexed id, int indexed result);
+    event ReceiveResponse(uint256 indexed id, string result);
 
 
     //Coordinator contract is one single contract that
@@ -66,6 +66,7 @@ contract Subscriber {
         response.length = 0;
         require(_id==query_id,"Wrong query Id");
         response.push(_response);
+        emit ReceiveResponse(_id, _response);
         //Implement your logic with _response data here
     }
     function callback(uint256 _id, string calldata _response1, string calldata _response2) external{
