@@ -1,6 +1,6 @@
 import web3 from './web3';
 
-const address = '0x2453F057130e191bcD1f6D41Bf66222f9e66333c'; // deployed contract, did some console.log, copypastaed from terminal
+const address = '0x24cA57A34CE032b4ffd4D6589BaC5A5d0A78DbCF'; // deployed contract, did some console.log, copypastaed from terminal
 const abi = [
 	{
 		"constant": false,
@@ -222,7 +222,6 @@ const abi = [
 		"type": "function"
 	}
 ]
-
 // local abstraction of contract
 export default new web3.eth.Contract(abi, address);
 
