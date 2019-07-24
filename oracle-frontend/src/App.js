@@ -2,81 +2,131 @@ import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import web3 from './web3';
-import lottery from './lottery';
+import subscriber from './subscriber';
 
 class App extends Component {
   state = {
-    
+    owner: '',
+    coordinator: '',
+    dots: '',
+    name1: '',
+    name2: '',
+    name3: '',
+    name4: '',
+    response1: '',
+    response2: '',
+    response3: '',
+    response4: '',
+    message: ''
   }; // ES6 syntatic sugar. Initialize state without explicitly writing constructor
 
   async componentDidMount() {
-    const manager = await lottery.methods.manager().call();
-    const players = await lottery.methods.getPlayers().call();
-    const balance = await web3.eth.getBalance(lottery.options.address);
+    const owner = await subscriber.methods.owner().call();
+    const coordinator = await subscriber.methods.coordinator().call();
 
-    this.setState({manager, players, balance});
-  }
+    this.setState({owner, coordinator});
+  };
 
-  onSubmit = async (event) => {
+  bond = async (event) => {
     event.preventDefault();
 
     const accounts = await web3.eth.getAccounts();
     console.log(accounts);
     console.log('hello');
-    console.log(this.state.value);
 
     this.setState({message: 'Waiting on transaction success...'});
 
-    await lottery.methods.enter().send({
+    await subscriber.methods.bond(this.state.dots).send({
       from: accounts[0],
-      value: web3.utils.toWei(this.state.value, 'ether')
     });
 
     this.setState({message: 'You have been entered!'});
   };
 
-  onClick = async() => {
+  query = async (event) => {
+    event.preventDefault();
+
     const accounts = await web3.eth.getAccounts();
+    console.log("querying");
 
     this.setState({message: 'Waiting on transaction success...'});
+    
+    const bytes32Arr = [];
 
-    await lottery.methods.pickWinner().send({
-      from:accounts[0]
+    await subscriber.methods.query("stocks", bytes32Arr).send({
+      from: accounts[0],
     });
 
-    this.setState({message: 'A winner has been chosen'});
+    this.setState({message: 'You have been entered!'});
   };
 
-  render() {
-    /*const result = await new web3.eth.Contract(JSON.parse(interface))
-     .deploy({data: '0x' + bytecode }) // add 0x bytecode
-     .send({from: accounts[0]}); // remove 'gas'
-    */
 
+  render() {
     return (
       <div>
-        <h2>Lottery Contract</h2>
-        <p>This contract is managed by {this.state.manager}</p>
-        <p>There are currently {this.state.players.length} people entered, competing to win {this.state.balance} ether.</p>
+        <h2>Subscriber Contract</h2>
+        <p>This contract is owned by {this.state.owner}</p>
+        <p>The ZapCoordinator is {this.state.coordinator}</p>
       
         <hr/>
 
-        <form onSubmit={this.onSubmit}>
-          <h4>Wnat to try your luck?</h4>
+        <form onSubmit={this.bond}>
+          <h4>Bond Dots</h4>
           <div>
-            <label>Amount of ether to enter</label>
+            <label>Amount of dots to bond</label>
             <input 
-              vlaue = {this.state.value}
-              onChange={event => this.setState({ value: event.target.value })}
+              type = "number"
+              value = {this.state.dots}
+              onChange={event => this.setState({ dots: event.target.value })}
             />
           </div>
-          <button>Enter</button>
+          <button>Bond</button>
         </form>
 
         <hr/>
 
-        <h4>Pick a winner</h4>
-        <button onClick={this.onClick}>Pick</button>
+        <form onSubmit={this.query}>
+          <h4>Query Stock Prices</h4>
+          <div>
+            <label>Stock1</label>
+            <input 
+              value = {this.state.name1}
+              onChange={event => this.setState({ name1: event.target.value })}
+            />
+          </div>
+          <div>
+            <label>Stock2</label>
+            <input 
+              value = {this.state.name2}
+              onChange={event => this.setState({ name2: event.target.value })}
+            />
+          </div>
+          <div>
+            <label>Stock3</label>
+            <input 
+              value = {this.state.nome3}
+              onChange={event => this.setState({ name3: event.target.value })}
+            />
+          </div>
+          <div>
+            <label>Stock4</label>
+            <input 
+              value = {this.state.name4}
+              onChange={event => this.setState({ name4: event.target.value })}
+            />
+          </div>
+          <button>Query</button>
+        </form>
+        
+        <hr />
+
+        <span><strong>Stock1: </strong> {this.state.name1} <em>{this.state.response1}</em></span>
+        <br/>
+        <span><strong>Stock2: </strong> {this.state.name2} <em>{this.state.response2}</em></span>
+        <br/>
+        <span><strong>Stock3: </strong> {this.state.name3} <em>{this.state.response3}</em></span>
+        <br/>
+        <span><strong>Stock4: </strong> {this.state.name4} <em>{this.state.response4}</em></span>
 
         <hr />
         <h1>{this.state.message}</h1>
