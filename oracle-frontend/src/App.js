@@ -57,12 +57,14 @@ class App extends Component {
     await subscriber.methods.query("stocks", bytes32Arr).send({
       from: accounts[0],
     });
-
-    subscriber.events.ReceiveResponse({},(error,event) => {
+    console.log(subscriber);
+    console.log(subscriber.events.ReceiveResponse);
+    await subscriber.events.ReceiveResponse({},(error,event) => {
       console.log(event);
     }).on('data', (event) => {
       this.setState({response1: 'Group created with ID: ' + event.returnValues.result})
       }).on('error', console.error);
+    console.log(this.state.response1)
     this.setState({message: 'Received the response!'});
   };
 
