@@ -1,0 +1,29 @@
+{
+
+	"title": "Stocks",
+	"public_key": "abcdef",
+	"NODE_URL": "wss://kovan.infura.io/ws/xeb916AFjrcttuQlezyq",
+	"mnemonic": "bus deal image opinion trial toward provide clump shaft high barrel grape",
+	"STATUS_URL":"",
+	"EndpointSchema": {
+		"name": "stocks",
+		"curve": [2,
+			0,
+			0,
+			10000,
+			2,
+			0,
+			3000000000000000000,
+			1000000000000000000
+		],
+		"broker": "",
+		"md": "Gives you the current stock price for a particular company's stocks.",
+		"queryList": [{
+			"query": "stocks",
+			"params": ["stockname"],
+			"dynamic": false,
+			"responseType": []
+		}]
+	}
+
+}
