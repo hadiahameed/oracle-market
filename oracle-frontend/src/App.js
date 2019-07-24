@@ -6,11 +6,7 @@ import lottery from './lottery';
 
 class App extends Component {
   state = {
-    manager: '',
-    players: [],
-    balance: '',
-    value: '',
-    message: ''
+    
   }; // ES6 syntatic sugar. Initialize state without explicitly writing constructor
 
   async componentDidMount() {
