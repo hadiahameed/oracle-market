@@ -22,6 +22,12 @@ class App extends Component {
     .on('data', (event) => {
       let value = event.returnValues.result;
       let resArray = value.split(',');
+      resArray.forEach((res,index) =>  {
+        if (res !== '') {
+          resArray[index] = ' :$' + res;
+        }
+      });
+      
       this.setState({response: resArray});
       this.setState({message: 'Received the response!'});
       }).on('error', console.error);
@@ -75,7 +81,7 @@ class App extends Component {
     const items = []
 
     for (const [index, value] of this.state.names.entries()) {
-      items.push( <span key={index}><strong>Stock {index + 1}: </strong> {value} <em>{this.state.response[index]}</em></span>)
+      items.push( <div key={index}><span ><strong>Stock {index + 1}: </strong> {value} <em> {this.state.response[index]} </em></span><br /></div>)
     }
     return (
       <div className="myClass">
