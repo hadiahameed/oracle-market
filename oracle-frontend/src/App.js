@@ -8,14 +8,8 @@ class App extends Component {
     owner: '',
     coordinator: '',
     dots: '',
-    name1: '',
-    name2: '',
-    name3: '',
-    name4: '',
-    response1: '',
-    response2: '',
-    response3: '',
-    response4: '',
+    names: [''],
+    response: [''],
     message: ''
   }; // ES6 syntatic sugar. Initialize state without explicitly writing constructor
 
@@ -26,7 +20,9 @@ class App extends Component {
     this.setState({owner, coordinator});
     subscriber.events.ReceiveResponse()
     .on('data', (event) => {
-      this.setState({response1: event.returnValues.result});
+      let value = event.returnValues.result;
+      let resArray = value.split(',');
+      this.setState({response: resArray});
       this.setState({message: 'Received the response!'});
       }).on('error', console.error);
   };
@@ -53,39 +49,47 @@ class App extends Component {
     console.log("querying");
 
     this.setState({message: 'Waiting on transaction success...'});
-    
-    const bytes32Arr = [];
 
-    bytes32Arr.push(web3.utils.fromAscii(this.state.name1));
-  
+    const bytes32Arr = [];
+    this.state.names.forEach(name =>  {
+      if (name !== '') {
+        bytes32Arr.push(web3.utils.fromAscii(name));
+      }
+    });
+    console.log(bytes32Arr)
     await subscriber.methods.query("stocks", bytes32Arr).send({
       from: accounts[0],
     });
 
     /*var myEvent = subscriber.events.ReceiveResponse({},{fromBlock: 0, toBlock: 'latest'});
     myEvent.watch(function(error, result){
-        console.log("on watch"); 
+        console.log("on watch");
         console.log(arguments);
     });*/
 
 
   };
 
-
+  
   render() {
+    const items = []
+
+    for (const [index, value] of this.state.names.entries()) {
+      items.push( <span key={index}><strong>Stock {index + 1}: </strong> {value} <em>{this.state.response[index]}</em></span>)
+    }
     return (
-      <div>
+      <div className="myClass">
         <h2>Subscriber Contract</h2>
         <p>This contract is owned by {this.state.owner}</p>
         <p>The ZapCoordinator is {this.state.coordinator}</p>
-      
+
         <hr/>
 
         <form onSubmit={this.bond}>
           <h4>Bond Dots</h4>
           <div>
             <label>Amount of dots to bond</label>
-            <input 
+            <input
               type = "number"
               value = {this.state.dots}
               onChange={event => this.setState({ dots: event.target.value })}
@@ -100,51 +104,70 @@ class App extends Component {
           <h4>Query Stock Prices</h4>
           <div>
             <label>Stock1</label>
-            <input 
-              value = {this.state.name1}
+            <input
+              value = {this.state.names[0]}
 
-              onChange={event => this.setState({ name1: event.target.value })}
+              onChange ={ event  => {
+                const newIds = this.state.names.slice(); //copy the array
+                newIds[0] = event.target.value; //execute the manipulations
+                this.setState({names: newIds}) //set the new state
+              }}
             />
           </div>
           <div>
             <label>Stock2</label>
-            <input 
+            <input
               value = {this.state.name2}
-              onChange={event => this.setState({ name2: event.target.value })}
+              onChange ={ event  => {
+                const newIds = this.state.names.slice(); //copy the array
+                newIds[1] = event.target.value; //execute the manipulations
+                this.setState({names: newIds}) //set the new state
+              }}
             />
           </div>
           <div>
             <label>Stock3</label>
-            <input 
+            <input
               value = {this.state.nome3}
-              onChange={event => this.setState({ name3: event.target.value })}
+              onChange ={ event  => {
+                const newIds = this.state.names.slice(); //copy the array
+                newIds[2] = event.target.value; //execute the manipulations
+                this.setState({names: newIds}) //set the new state
+              }}
             />
           </div>
           <div>
             <label>Stock4</label>
-            <input 
+            <input
               value = {this.state.name4}
-              onChange={event => this.setState({ name4: event.target.value })}
+              onChange ={ event  => {
+                const newIds = this.state.names.slice(); //copy the array
+                newIds[3] = event.target.value; //execute the manipulations
+                this.setState({names: newIds}) //set the new state
+              }}
             />
           </div>
           <button>Query</button>
         </form>
-        
+
         <hr />
+        <div>
+            {items}
+        </div>
 
-        <span><strong>Stock1: </strong> {this.state.name1} <em>{this.state.response1}</em></span>
+        {/* <span><strong>Stock1: </strong> {this.state.names[0]} <em>{this.state.response[0]}</em></span>
         <br/>
-        <span><strong>Stock2: </strong> {this.state.name2} <em>{this.state.response2}</em></span>
+        <span><strong>Stock2: </strong> {this.state.names[1]} <em>{this.state.response[1]}</em></span>
         <br/>
-        <span><strong>Stock3: </strong> {this.state.name3} <em>{this.state.response3}</em></span>
+        <span><strong>Stock3: </strong> {this.state.names[2]} <em>{this.state.response[2]}</em></span>
         <br/>
-        <span><strong>Stock4: </strong> {this.state.name4} <em>{this.state.response4}</em></span>
-
+        <span><strong>Stock4: </strong> {this.state.names[3]} <em>{this.state.response[3]}</em></span>
+            */}
         <hr />
         <h1>{this.state.message}</h1>
       </div>
     );
-    
+
   }
 }
 

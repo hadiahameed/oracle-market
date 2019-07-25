@@ -1,6 +1,6 @@
 import web3 from './web3';
 
-const address = '0x24cA57A34CE032b4ffd4D6589BaC5A5d0A78DbCF'; // deployed contract, did some console.log, copypastaed from terminal
+const address = '0xb7191bAf1b694076eC2DE4DA7fE9BF761717822F'; // deployed contract, did some console.log, copypastaed from terminal
 const abi = [
 	{
 		"constant": false,
@@ -30,6 +30,36 @@ const abi = [
 			}
 		],
 		"name": "bond",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_id",
+				"type": "uint256"
+			},
+			{
+				"name": "_response1",
+				"type": "string"
+			},
+			{
+				"name": "_response2",
+				"type": "string"
+			},
+			{
+				"name": "_response3",
+				"type": "string"
+			},
+			{
+				"name": "_response4",
+				"type": "string"
+			}
+		],
+		"name": "callback",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
