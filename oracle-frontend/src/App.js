@@ -24,6 +24,11 @@ class App extends Component {
     const coordinator = await subscriber.methods.coordinator().call();
 
     this.setState({owner, coordinator});
+    subscriber.events.ReceiveResponse()
+    .on('data', (event) => {
+      this.setState({response1: event.returnValues.result});
+      this.setState({message: 'Received the response!'});
+      }).on('error', console.error);
   };
 
   bond = async (event) => {
@@ -31,15 +36,13 @@ class App extends Component {
 
     const accounts = await web3.eth.getAccounts();
     console.log(accounts);
-    console.log('hello');
+    console.log('BONDING');
 
     this.setState({message: 'Waiting on transaction success...'});
 
     await subscriber.methods.bond(this.state.dots).send({
       from: accounts[0],
     });
-    console.log(this.state.dots);
-    console.log(this.state.message);
     this.setState({message: 'You have been entered!'});
   };
 
@@ -52,20 +55,20 @@ class App extends Component {
     this.setState({message: 'Waiting on transaction success...'});
     
     const bytes32Arr = [];
-    bytes32Arr.push(web3.utils.fromAscii(this.state.name1));
 
+    bytes32Arr.push(web3.utils.fromAscii(this.state.name1));
+  
     await subscriber.methods.query("stocks", bytes32Arr).send({
       from: accounts[0],
     });
-    console.log(subscriber);
-    console.log(subscriber.events.ReceiveResponse);
-    await subscriber.events.ReceiveResponse({},(error,event) => {
-      console.log(event);
-    }).on('data', (event) => {
-      this.setState({response1: 'Group created with ID: ' + event.returnValues.result})
-      }).on('error', console.error);
-    console.log(this.state.response1)
-    this.setState({message: 'Received the response!'});
+
+    /*var myEvent = subscriber.events.ReceiveResponse({},{fromBlock: 0, toBlock: 'latest'});
+    myEvent.watch(function(error, result){
+        console.log("on watch"); 
+        console.log(arguments);
+    });*/
+
+
   };
 
 
