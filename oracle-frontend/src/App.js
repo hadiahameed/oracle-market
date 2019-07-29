@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import './App.css';
 import web3 from './web3';
 import subscriber from './subscriber';
 
@@ -10,7 +9,7 @@ class App extends Component {
     dots: '',
     names: [''],
     response: [''],
-    message: ''
+    message: 'Ready to bond.'
   }; // ES6 syntatic sugar. Initialize state without explicitly writing constructor
 
   async componentDidMount() {
@@ -27,17 +26,16 @@ class App extends Component {
           resArray[index] = ' :$' + res;
         }
       });
-      
+
       this.setState({response: resArray});
       this.setState({message: 'Received the response!'});
-      }).on('error', console.error);
+    }).on('error', console.error);
   };
 
   bond = async (event) => {
     event.preventDefault();
 
     const accounts = await web3.eth.getAccounts();
-    console.log(accounts);
     console.log('BONDING');
 
     this.setState({message: 'Waiting on transaction success...'});
@@ -66,17 +64,9 @@ class App extends Component {
     await subscriber.methods.query("stocks", bytes32Arr).send({
       from: accounts[0],
     });
-
-    /*var myEvent = subscriber.events.ReceiveResponse({},{fromBlock: 0, toBlock: 'latest'});
-    myEvent.watch(function(error, result){
-        console.log("on watch");
-        console.log(arguments);
-    });*/
-
-
   };
 
-  
+
   render() {
     const items = []
 
@@ -84,94 +74,126 @@ class App extends Component {
       items.push( <div key={index}><span ><strong>Stock {index + 1}: </strong> {value} <em> {this.state.response[index]} </em></span><br /></div>)
     }
     return (
-      <div className="myClass">
-        <h2>Subscriber Contract</h2>
-        <p>This contract is owned by {this.state.owner}</p>
-        <p>The ZapCoordinator is {this.state.coordinator}</p>
-
-        <hr/>
-
-        <form onSubmit={this.bond}>
-          <h4>Bond Dots</h4>
-          <div>
-            <label>Amount of dots to bond</label>
-            <input
-              type = "number"
-              value = {this.state.dots}
-              onChange={event => this.setState({ dots: event.target.value })}
-            />
+    <div className="container">
+      <div className="row">
+          <div class="col-xs-12 col-md-8">
+              <h2>Subscriber Contract</h2>
+              <p>This contract is owned by {this.state.owner}</p>
+              <p>The ZapCoordinator is {this.state.coordinator}</p>
           </div>
-          <button>Bond</button>
-        </form>
-
-        <hr/>
-
-        <form onSubmit={this.query}>
-          <h4>Query Stock Prices</h4>
-          <div>
-            <label>Stock1</label>
-            <input
-              value = {this.state.names[0]}
-
-              onChange ={ event  => {
-                const newIds = this.state.names.slice(); //copy the array
-                newIds[0] = event.target.value; //execute the manipulations
-                this.setState({names: newIds}) //set the new state
-              }}
-            />
-          </div>
-          <div>
-            <label>Stock2</label>
-            <input
-              value = {this.state.name2}
-              onChange ={ event  => {
-                const newIds = this.state.names.slice(); //copy the array
-                newIds[1] = event.target.value; //execute the manipulations
-                this.setState({names: newIds}) //set the new state
-              }}
-            />
-          </div>
-          <div>
-            <label>Stock3</label>
-            <input
-              value = {this.state.nome3}
-              onChange ={ event  => {
-                const newIds = this.state.names.slice(); //copy the array
-                newIds[2] = event.target.value; //execute the manipulations
-                this.setState({names: newIds}) //set the new state
-              }}
-            />
-          </div>
-          <div>
-            <label>Stock4</label>
-            <input
-              value = {this.state.name4}
-              onChange ={ event  => {
-                const newIds = this.state.names.slice(); //copy the array
-                newIds[3] = event.target.value; //execute the manipulations
-                this.setState({names: newIds}) //set the new state
-              }}
-            />
-          </div>
-          <button>Query</button>
-        </form>
-
-        <hr />
-        <div>
-            {items}
-        </div>
-
-        {/* <span><strong>Stock1: </strong> {this.state.names[0]} <em>{this.state.response[0]}</em></span>
-        <br/>
-        <span><strong>Stock2: </strong> {this.state.names[1]} <em>{this.state.response[1]}</em></span>
-        <br/>
-        <span><strong>Stock3: </strong> {this.state.names[2]} <em>{this.state.response[2]}</em></span>
-        <br/>
-        <span><strong>Stock4: </strong> {this.state.names[3]} <em>{this.state.response[3]}</em></span>
-            */}
-        <hr />
-        <h1>{this.state.message}</h1>
       </div>
+      <hr/>
+      <div className="row">
+        <div class="col-xs-12 col-md-8">
+          <h4>Status</h4>
+          <p>{this.state.message}</p>
+          
+        </div>
+      </div>
+
+      <hr/>
+      <div className="row">
+          <div class="col-xs-12 col-md-8">
+              <form  onSubmit={this.bond}>
+
+                  <h4>Bond to the Oracle</h4>
+                  <div class="form-group">
+                      <label class="col-sm-10">Amount of dots to bond: </label>
+                      <div class="col-sm-10">
+                          <input
+                          class="form-control"
+                          type = "number"
+                      value = {this.state.dots}
+                      onChange={event => this.setState({ dots: event.target.value })}
+                          />
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <button id="bonddots" type="submit" class="btn btn-primary">Bond</button>
+                    </div>
+                  </div>
+
+              </form>
+          </div>
+      </div>
+      <hr/>
+      <div className="row">
+          <div className="col-xs-12 col-md-8">
+              <form onSubmit={this.query}>
+
+                  <h4>Query Stock Prices</h4>
+                  <div class="form-group">
+                      <label class="col-sm-2 control-label">Stock1</label>
+                      <div class="col-sm-10">
+                          <input
+                          class="form-control"
+                          value = {this.state.names[0]}
+                          onChange ={ event  => {
+                              const newIds = this.state.names.slice(); //copy the array
+                              newIds[0] = event.target.value; //execute the manipulations
+                              this.setState({names: newIds}) //set the new state
+                          }}
+                          />
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label class="col-sm-2 control-label">Stock2</label>
+                      <div class="col-sm-10">
+                          <input
+                          class="form-control"
+                          value = {this.state.names[1]}
+                          onChange ={ event  => {
+                              const newIds = this.state.names.slice(); //copy the array
+                              newIds[1] = event.target.value; //execute the manipulations
+                              this.setState({names: newIds}) //set the new state
+                          }}
+                          />
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label class="col-sm-2 control-label">Stock3</label>
+                      <div class="col-sm-10">
+                          <input
+                          class="form-control"
+                          value = {this.state.names[2]}
+                          onChange ={ event  => {
+                              const newIds = this.state.names.slice(); //copy the array
+                              newIds[2] = event.target.value; //execute the manipulations
+                              this.setState({names: newIds}) //set the new state
+                          }}
+                          />
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label class="col-sm-2 control-label">Stock4</label>
+                      <div class="col-sm-10">
+                          <input
+                          class="form-control"
+                          value = {this.state.names[3]}
+                          onChange ={ event  => {
+                              const newIds = this.state.names.slice(); //copy the array
+                              newIds[3] = event.target.value; //execute the manipulations
+                              this.setState({names: newIds}) //set the new state
+                          }}
+                          />
+                      </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <button type="submit" class="btn btn-primary">Query</button>
+                    </div>
+                  </div>
+              </form>
+          </div>
+          <div className="col-xs-4">
+            {items}
+          </div>
+      </div>
+      <hr />
+      
+  </div>
     );
 
   }
