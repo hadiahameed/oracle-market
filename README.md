@@ -24,12 +24,9 @@
  - Wait for the status to say, "Received the response!"
  - You can see the stock prices in the results section.
 
+ Note:
+ After deploying the contract on Remix (using injected Web3 environment for deployment), we copied the contract address and abi into `oracle-frontend/src/subscriber.js`. That's how we were able to access the contract's functions in our javascript
+ 
 
-# How to make your own smart dApp
-There are two parts to this tutorial:
-1) Creating an off-chain oracle
-2) Creating a smart contract that queries the oracle
 
-- Make an empty folder `stock-price-dApp`
-## Creating an Oracle
-- Inside 
+
