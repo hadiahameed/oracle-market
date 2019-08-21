@@ -18,13 +18,13 @@ This is a demo frontend application that uses a smart contract to query an oracl
  - The webpage will open in your browser.
  - It will prompt you to connect to your MetaMask account.
  - Amount of dots to bond: 1 (if you want to query the oracle once)
- - Wait for the status to say, "You have been entered!"
+ - Wait for the status to say, "Great! You are ready to go."
  - Stock1: "AAPL" (to get Apple's stock price)
  - Stock2: "FB" (to get Facebook's stock price)
  - Stock3: "TWTR" (to get Twitter's stock price)
  - Stock4: "MSFT" (to get Microsoft's stock price)
  - Click on "Query"
- - Wait for the status to say, "Received the response!"
+ - Wait for the status to say, "Hooray! Received the response."
  - You can see the stock prices in the results section.
 
  # Project Tutorial:
