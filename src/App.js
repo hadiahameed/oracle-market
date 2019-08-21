@@ -87,7 +87,7 @@ class App extends Component {
         <div class="col-xs-12 col-md-8">
           <h4>Status</h4>
           <p>{this.state.message}</p>
-          
+
         </div>
       </div>
 
@@ -192,7 +192,7 @@ class App extends Component {
           </div>
       </div>
       <hr />
-      
+
   </div>
     );
 

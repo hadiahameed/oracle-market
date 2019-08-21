@@ -1,9 +1,12 @@
 # oracle-market
+This is a demo frontend application that uses a smart contract to query an oracle and display the results to the end-users. The users can bond dots to the oracle and get the current stock rates for various stocks such as Apple (AAPL), Twitter (TWTR) etc.
 
-#Pre-requisites:
-- Have a MetaMask extension in your browser. It's better if you sign into your MetaMask account before running this App.
+![](frontend.png)
 
-# How to use this oracle:
+# API used: 
+- https://financialmodelingprep.com/api/v3/stock/real-time-price
+
+# How to run this project:
  - `git clone https://github.com/hadiahameed/oracle-market.git`
  - `cd stocks-oracle`
  - `yarn`
@@ -24,9 +27,24 @@
  - Wait for the status to say, "Received the response!"
  - You can see the stock prices in the results section.
 
- Note:
- After deploying the contract on Remix (using injected Web3 environment for deployment), we copied the contract address and abi into `oracle-frontend/src/subscriber.js`. That's how we were able to access the contract's functions in our javascript
- 
+ # Project Tutorial:
+There are two parts to this tutorial:
+1) Creating an off-chain oracle
+2) Creating a smart contract that queries the oracle
+
+- Make an empty folder `oracle-market`
+### Creating an Oracle
+- `mkdir stocks-oracle`
+- Use the following tutorial to make an oracle: https://github.com/hadiahameed/zap-oracle-template
+
+### Creating a smart contract
+- `mkdir smart-contract`
+- Run `git clone https://github.com/zapproject/subscriber-template`
+- The contract functions are in contracts/subscriber.sol
+- Deploying the contract on Remix: https://remix.ethereum.org and use 'Injected Web3 environment' for deployment.
+![](remix.png)
+- Copy the contract address and abi into `oracle-frontend/src/subscriber.js`. That's how we were able to access the contract's functions in our javascript.
 
 
+Happy Coding!
 

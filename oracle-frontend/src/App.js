@@ -9,7 +9,7 @@ class App extends Component {
     dots: '',
     names: [''],
     response: [''],
-    message: 'Ready to bond.'
+    message: <h3 style={{color: 'blue'}}>Ready to bond.</h3>
   }; // ES6 syntatic sugar. Initialize state without explicitly writing constructor
 
   async componentDidMount() {
@@ -23,12 +23,12 @@ class App extends Component {
       let resArray = value.split(',');
       resArray.forEach((res,index) =>  {
         if (res !== '') {
-          resArray[index] = ' :$' + res;
+          resArray[index] = ': $' + res;
         }
       });
 
       this.setState({response: resArray});
-      this.setState({message: 'Received the response!'});
+      this.setState({message: <h3 style={{color: 'darkgreen'}}>Hooray! Received the response.</h3>});
     }).on('error', console.error);
   };
 
@@ -36,23 +36,22 @@ class App extends Component {
     event.preventDefault();
 
     const accounts = await web3.eth.getAccounts();
-    console.log('BONDING');
 
-    this.setState({message: 'Waiting on transaction success...'});
+    this.setState({message: <h3 style={{color: 'red'}}>Waiting to bond. Estimated time: 2 min...</h3>});
 
     await subscriber.methods.bond(this.state.dots).send({
       from: accounts[0],
     });
-    this.setState({message: 'You have been entered!'});
+    this.setState({message: <h3 style={{color: 'darkgreen'}}>Great! You are ready to go.</h3>});
   };
 
   query = async (event) => {
     event.preventDefault();
 
     const accounts = await web3.eth.getAccounts();
-    console.log("querying");
 
-    this.setState({message: 'Waiting on transaction success...'});
+
+    this.setState({message: <h3 style={{color: 'red'}}>Waiting to query. Estimated time: 1 minute..</h3>});
 
     const bytes32Arr = [];
     this.state.names.forEach(name =>  {
@@ -60,7 +59,7 @@ class App extends Component {
         bytes32Arr.push(web3.utils.fromAscii(name));
       }
     });
-    console.log(bytes32Arr)
+
     await subscriber.methods.query("stocks", bytes32Arr).send({
       from: accounts[0],
     });
@@ -69,10 +68,16 @@ class App extends Component {
 
   render() {
     const items = []
+    let res = this.state.response
+    console.log(res)
+    if (res[0]!=='') {
+      for (const [index, value] of this.state.names.entries()) {
+        items.push( <div key={index}><span ><strong>Stock {index + 1}: </strong> {value} <em> {this.state.response[index]} </em></span><br /></div>)
+      }
 
-    for (const [index, value] of this.state.names.entries()) {
-      items.push( <div key={index}><span ><strong>Stock {index + 1}: </strong> {value} <em> {this.state.response[index]} </em></span><br /></div>)
     }
+
+
     return (
     <div className="container">
       <div className="row">
@@ -124,6 +129,7 @@ class App extends Component {
               <form onSubmit={this.query}>
 
                   <h4>Query Stock Prices</h4>
+                  <h6>(e.g. AAPL (Apple), TWTR (Twitter), FB (Facebook), GE (General Electric) etc.</h6>
                   <div class="form-group">
                       <label class="col-sm-2 control-label">Stock1</label>
                       <div class="col-sm-10">
@@ -188,6 +194,7 @@ class App extends Component {
               </form>
           </div>
           <div className="col-xs-4">
+            <h2>Results:</h2>
             {items}
           </div>
       </div>
